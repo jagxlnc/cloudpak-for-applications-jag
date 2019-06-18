@@ -1,0 +1,11 @@
+image:
+  repository: mycluster.icp:8500/default/wastest # Specify your cluster CA domain here
+  tag: hello-world
+
+ingress:
+  enabled: true
+  path: /demo/
+  rewriteTarget: /HelloWorld/hello
+
+configProperties:
+  configMapName: my-config-properties
