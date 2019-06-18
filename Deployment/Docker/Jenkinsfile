@@ -44,6 +44,15 @@ podTemplate(label: 'icp-was-build-1', serviceAccount: serviceAccount, namespace:
             """
           }
         }
+        stage ('Config using ConfigMap') {
+            container('kubectl') {
+               echo " Create ConfigMap..."
+                sh """
+                cd Deployment/Docker
+                kubectl apply -f config-map.yaml
+                """
+            }
+        }
         stage ('Deploy using Helm') {
           container('helm') {
             sh """
