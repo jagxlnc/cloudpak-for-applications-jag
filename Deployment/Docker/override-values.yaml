@@ -3,8 +3,8 @@ image:
 
 ingress:
   enabled: true
-  path: /snoop/
-  rewriteTarget: /snoop
+  path: /demo/
+  rewriteTarget: /CustomerOrderServicesWeb
 
 configProperties:
   configMapName: my-custom-config-properties
