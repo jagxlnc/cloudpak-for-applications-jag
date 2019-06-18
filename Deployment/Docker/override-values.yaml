@@ -7,4 +7,4 @@ ingress:
   rewriteTarget: /snoop
 
 configProperties:
-  configMapName: my-config-properties
+  configMapName: my-custom-config-properties
