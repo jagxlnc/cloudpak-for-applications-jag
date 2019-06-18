@@ -32,7 +32,7 @@ podTemplate(label: 'icp-was-build-1', serviceAccount: serviceAccount, namespace:
         }
         stage ('Docker Build') {
           container('docker') {
-            def imageTag = "mycluster.icp:8500/default/tWAS:${gitCommit}"
+            def imageTag = "mycluster.icp:8500/default/twas:${gitCommit}"
             echo "imageTag ${imageTag}"
             sh """
             cd Deployment/Docker
