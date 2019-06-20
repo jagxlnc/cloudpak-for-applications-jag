@@ -4,7 +4,7 @@ ARG WEBSPHERE_VERSION=9.0.0.11
 FROM ibmcom/websphere-traditional:$WEBSPHERE_VERSION as migration
 
 # Use --build-arg PASSWORD="your password" to specify password for WASPostUpgrade.
-ARG PASSWORD
+ARG PASSWORD=wasadmin
 
 COPY --chown=was:0 migr /tmp/migr
 COPY --chown=was:0 migration.properties /opt/IBM/WebSphere/AppServer/properties/migration.properties
