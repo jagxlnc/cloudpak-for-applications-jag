@@ -28,7 +28,7 @@ COPY --from=migration --chown=was:0 /opt/IBM/WebSphere/AppServer/profiles/AppSrv
 COPY --from=migration --chown=was:0 /opt/IBM/WebSphere/AppServer/java/8.0/jre/lib/security/java.security /opt/IBM/WebSphere/AppServer/java/8.0/jre/lib/security/
 
 COPY --chown=was:0 db2drivers/ /opt/IBM/db2drivers/
-COPY --chown=was:0 target/CustomerOrderServicesApp-0.1.0-SNAPSHOT.ear /work/config/CustomerOrderServicesApp.ear 
+COPY --chown=was:0 CustomerOrderServicesApp/target/CustomerOrderServicesApp-0.1.0-SNAPSHOT.ear /work/config/CustomerOrderServicesApp.ear 
 COPY --chown=was:0 update_app.py /work/config/update_app.py
 RUN /work/configure.sh
 
