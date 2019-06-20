@@ -4,7 +4,7 @@ ARG WEBSPHERE_VERSION=9.0.0.11
 FROM ibmcom/websphere-traditional:$WEBSPHERE_VERSION as migration
 
 # Use --build-arg PASSWORD="your password" to specify password for WASPostUpgrade.
-ARG PASSWORD=wasadmin
+ARG PASSWORD
 
 COPY --chown=was:0 migr /tmp/migr
 COPY --chown=was:0 migration.properties /opt/IBM/WebSphere/AppServer/properties/migration.properties
@@ -33,3 +33,4 @@ ADD CustomerOrderServicesApp-0.1.0-SNAPSHOT.ear /work/config/CustomerOrderServic
 RUN /work/configure.sh
 
 ENV ADMIN_USER_NAME=wasadmin
+ENV PASSWORD=wasadmin
