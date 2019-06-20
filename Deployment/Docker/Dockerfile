@@ -22,7 +22,8 @@ FROM ibmcom/websphere-traditional:$WEBSPHERE_VERSION
 
 RUN rm -rf /opt/IBM/WebSphere/AppServer/profiles/AppSrv01/servers/server1/configuration/wsBundleMetadata/jpa-2.1.xml && \
     rm -rf /opt/IBM/WebSphere/AppServer/profiles/AppSrv01/servers/server1/configuration/wsBundleMetadata/jaxrs-2.0.xml && \
-    touch /tmp/passwordupdated && cp /tmp/passwordupdated /tmp/PASSWORD
+    echo 'wasadmin' > /tmp/PASSWORD
+    #touch /tmp/passwordupdated && cp /tmp/passwordupdated /tmp/PASSWORD
 
 COPY --from=migration --chown=was:0 /opt/IBM/WebSphere/AppServer/profiles/AppSrv01 /opt/IBM/WebSphere/AppServer/profiles/AppSrv01/
 COPY --from=migration --chown=was:0 /opt/IBM/WebSphere/AppServer/java/8.0/jre/lib/security/java.security /opt/IBM/WebSphere/AppServer/java/8.0/jre/lib/security/
