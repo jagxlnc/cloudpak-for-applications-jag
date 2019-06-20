@@ -39,7 +39,7 @@ podTemplate(label: 'icp-was-build-1', serviceAccount: serviceAccount, namespace:
             ln -s /msb_reg_sec/.dockercfg /home/jenkins/.dockercfg
             mkdir /home/jenkins/.docker
             ln -s /msb_reg_sec/.dockerconfigjson /home/jenkins/.docker/config.json
-            docker build -t $imageTag .
+            docker build -t $imageTag --build-arg PASSWORD=password .
             docker push $imageTag
             """
           }
