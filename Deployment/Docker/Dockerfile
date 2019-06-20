@@ -33,4 +33,3 @@ ADD CustomerOrderServicesApp-0.1.0-SNAPSHOT.ear /work/config/CustomerOrderServic
 RUN /work/configure.sh
 
 ENV ADMIN_USER_NAME=wasadmin
-ENV PASSWORD=wasadmin
