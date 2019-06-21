@@ -30,9 +30,7 @@ COPY --from=migration --chown=was:0 /opt/IBM/WebSphere/AppServer/java/8.0/jre/li
 
 COPY --chown=was:0 db2drivers/ /opt/IBM/db2drivers/
 COPY --chown=was:0 update_app.py /work/config/update_app.py
-RUN cat /tmp/PASSWORD
 ADD CustomerOrderServicesApp-0.1.0-SNAPSHOT.ear /work/config/CustomerOrderServicesApp.ear
-RUN work/start_server.sh
-RUN /work/run_py_script.sh /work/config/update_app.py
+RUN /work/confgure.sh
 
 ENV ADMIN_USER_NAME=wasadmin
