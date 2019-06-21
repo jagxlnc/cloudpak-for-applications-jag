@@ -21,8 +21,7 @@ RUN /opt/IBM/WebSphere/AppServer/bin/WASPostUpgrade.sh /tmp/migr -oldProfile App
 FROM ibmcom/websphere-traditional:$WEBSPHERE_VERSION
 
 RUN rm -rf /opt/IBM/WebSphere/AppServer/profiles/AppSrv01/servers/server1/configuration/wsBundleMetadata/jpa-2.1.xml && \
-    rm -rf /opt/IBM/WebSphere/AppServer/profiles/AppSrv01/servers/server1/configuration/wsBundleMetadata/jaxrs-2.0.xml && \
-    echo -n "$PASSWORD" > /tmp/PASSWORD && cat /tmp/PASSWORD
+    rm -rf /opt/IBM/WebSphere/AppServer/profiles/AppSrv01/servers/server1/configuration/wsBundleMetadata/jaxrs-2.0.xml 
     
 
 COPY --from=migration --chown=was:0 /opt/IBM/WebSphere/AppServer/profiles/AppSrv01 /opt/IBM/WebSphere/AppServer/profiles/AppSrv01/
@@ -31,6 +30,7 @@ COPY --from=migration --chown=was:0 /opt/IBM/WebSphere/AppServer/java/8.0/jre/li
 COPY --chown=was:0 db2drivers/ /opt/IBM/db2drivers/
 COPY --chown=was:0 update_app.py /work/config/update_app.py
 ADD CustomerOrderServicesApp-0.1.0-SNAPSHOT.ear /work/config/CustomerOrderServicesApp.ear
+RUN echo -n "wasadmin" > /tmp/PASSWORD
 RUN /work/configure.sh
 
 ENV ADMIN_USER_NAME=wasadmin
