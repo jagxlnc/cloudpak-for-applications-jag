@@ -29,8 +29,8 @@ COPY --from=migration --chown=was:0 /opt/IBM/WebSphere/AppServer/profiles/AppSrv
 COPY --from=migration --chown=was:0 /opt/IBM/WebSphere/AppServer/java/8.0/jre/lib/security/java.security /opt/IBM/WebSphere/AppServer/java/8.0/jre/lib/security/
 
 COPY --chown=was:0 db2drivers/ /opt/IBM/db2drivers/
-#COPY --chown=was:0 update.py /work/config/app_update.py
-COPY --chown=was:0 app-update.props  /work/config/update_app.props
+#COPY --chown=was:0 update.py /work/config/update_app.py
+COPY --chown=was:0 app-update.props  /work/config/pp-aupdate.props
 COPY --chown=was:0 CustomerOrderServicesApp-0.1.0-SNAPSHOT.ear /work/config/CustomerOrderServicesApp-0.1.0-SNAPSHOT.ear
 
 RUN /work/configure.sh
