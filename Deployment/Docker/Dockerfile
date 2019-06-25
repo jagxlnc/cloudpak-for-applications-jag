@@ -30,7 +30,7 @@ COPY --from=migration --chown=was:0 /opt/IBM/WebSphere/AppServer/java/8.0/jre/li
 
 COPY --chown=was:0 db2drivers/ /opt/IBM/db2drivers/
 #COPY --chown=was:0 update.py /work/config/app_update.py
-COPY --chown=was:0 app-update.props  /work/config/app-update.props
+COPY --chown=was:0 app-update.props  /work/config/update_app.props
 COPY --chown=was:0 CustomerOrderServicesApp-0.1.0-SNAPSHOT.ear /work/config/CustomerOrderServicesApp-0.1.0-SNAPSHOT.ear
 
 RUN /work/configure.sh
