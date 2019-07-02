@@ -19,7 +19,7 @@ pipeline {
                     script {
                       openshift.withCluster() {
                         openshift.withProject() {
-                          def objects = openshift.apply( readFile("Deployment/openshift/yaml/ssc.yaml")
+                          def objects = openshift.apply( readFile("Deployment/openshift/yaml/ssc.yaml"))
                           def objects = openshift.apply( readFile("Deployment/openshift/yaml/dc.yaml"), "--namespace=appmod-twas" )
                           println "Created objects: ${objects.names()}"
                         }
