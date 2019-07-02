@@ -28,7 +28,7 @@ pipeline {
               // copy any raw yamls or json from openshift directory to be applied at deploy time
               sh """
               mkdir -p ocp_deploy_assets
-              cd  ../Deployment/openshift/yaml
+              cd  Deployment/openshift/yaml
               cp  *.yaml ocp_deploy_assets/ || true
               """
               // print out the dir structure
