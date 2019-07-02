@@ -16,8 +16,11 @@ pipeline {
     stages {
         stage('Maven build') {
           steps {
-            sh 'mvn -v'
-            sh 'mvn clean package'
+            sh """
+            mvn -v 
+            cd CustomerOrderServicesProject
+            mvn clean package
+            """
           }
         }
         stage('Copy OCP deployment artifacts') {
