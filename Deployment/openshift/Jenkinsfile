@@ -30,10 +30,10 @@ pipeline {
                         openshift.withProject() {
                           sh """
                           cd  Deployment/openshift/yaml
-                          openshift.apply(ssc.yaml)
-                          openshift.apply(dc.yaml)
-                          openshift.apply(service.yaml)
-                          openshift.apply(route.yaml)
+                          openshift.apply(readFile(ssc.yaml))
+                          openshift.apply(readFile(dc.yaml))
+                          openshift.apply(readFile(service.yaml))
+                          openshift.apply(readFile(route.yaml))
                           """
                         }
                       }
