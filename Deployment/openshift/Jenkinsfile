@@ -4,9 +4,14 @@
 **/
 
 openshift.withCluster() {
-  env.NAMESPACE = "appmod-twas"
+  env.NAMESPACE = openshift.project()
   env.APP_NAME = "${JOB_NAME}".replaceAll(/-build.*/, '')
   echo "Starting Pipeline for ${APP_NAME}..."
+
+  env.BUILD = "${env.NAMESPACE}"
+
+  env.BASE_IMAGE_REPO = "ibmcom/websphere-traditional"
+  env.BASE_IMAGE_TAG = "9.0.0.11"
 }
 
 pipeline {
@@ -14,7 +19,7 @@ pipeline {
       label "maven"
     }
     stages {
-      stage('Maven build') {
+      /*stage('Maven build') {
           steps {
             sh """
             mvn -v 
@@ -22,8 +27,8 @@ pipeline {
             mvn clean package
             """
           }
-        }
-        stage("Deploy objects") {
+        }*/
+        /*stage("Deploy objects") {
                   steps {
                     script {
                       openshift.withCluster() {
@@ -38,6 +43,88 @@ pipeline {
                       }
                     }
                   }
-                }  
+                }*/ 
+                // Build Container Image using the artifacts produced in previous stages
+                        stage('Build Container Image'){
+                          steps {
+                            script {
+                              // Build container image using local Openshift cluster
+                              openshift.withCluster() {
+                                openshift.withProject() {
+                                  timeout (time: 10, unit: 'MINUTES') {
+                                    // generate the imagestreams and buildconfig
+                                    def src_image_stream = [
+                                      "apiVersion": "v1",
+                                      "kind": "ImageStream",
+                                      "metadata": [
+                                        "name": "websphere-traditional",
+                                      ],
+                                      "spec": [
+                                        "tags": [
+                                          [
+                                            "name": "9.0.0.11",
+                                            "from": [
+                                              "kind": "DockerImage",
+                                              "name": "${env.BASE_IMAGE_REPO}:${env.BASE_IMAGE_TAG}"
+                                            ]
+                                          ]
+                                        ]
+                                      ]
+                                    ]
+                                    openshift.apply(src_image_stream)
+
+                                    def target_image_stream = [
+                                      "apiVersion": "v1",
+                                      "kind": "ImageStream",
+                                      "metadata": [
+                                          "name": "${env.APP_NAME}",
+                                      ]
+                                    ]
+                                    openshift.apply(target_image_stream)
+
+                                    def buildconfig = [
+                                      "apiVersion": "v1",
+                                      "kind": "BuildConfig",
+                                      "metadata": [
+                                        "name": "${env.APP_NAME}",
+                                      ],
+                                      "spec": [
+                                        "output": [
+                                          "to": [
+                                            "kind": "ImageStreamTag",
+                                            "name": "${env.APP_NAME}:${env.BUILD_NUMBER}"
+                                          ]
+                                        ],
+                                        "source": [
+                                          "type": "Binary"
+                                        ],
+                                        "strategy": [
+                                          "dockerStrategy": [
+                                            "from": [
+                                              "kind": "ImageStreamTag",
+                                              "name": "websphere-traditional:9.0.0.11"
+                                            ],
+                                            "dockerfilePath": "Deployment/Docker/Dockerfile",
+                                            "noCache": true,
+                                            "forcePull": true
+                                          ]
+                                        ],
+                                        "failedBuildsHistoryLimit": 3,
+                                        "successfulBuildsHistoryLimit": 3
+                                      ]
+                                    ]
+                                    openshift.apply(buildconfig)
+
+                                    // run the build and wait for completion
+                                    def build = openshift.selector("bc", env.APP_NAME).startBuild("--from-dir=.")
+                                    
+                                    // print the build logs
+                                    build.logs('-f')
+                                  }
+                                }        
+                              }
+                            }
+                          }
+                    }
               }
             }
