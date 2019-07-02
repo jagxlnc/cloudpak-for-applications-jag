@@ -28,9 +28,9 @@ pipeline {
               mkdir -p ocp_deploy_assets
               cp  *.yaml ocp_deploy_assets/ || true
               """
-               }
               // print out the dir structure
               sh "find ocp_deploy_assets"
+               }
             } 
             stage("Deploy objects") {
                   steps {
