@@ -27,9 +27,9 @@ pipeline {
           steps {
               // copy any raw yamls or json from openshift directory to be applied at deploy time
               sh """
-              mkdir -p ocp_deploy_assets
               cd  Deployment/openshift/yaml
-              cp  *.yaml ocp_deploy_assets/ || true
+              mkdir -p ocp_deploy_assets
+              cp  *.yaml ocp_deploy_assets || true
               """
               // print out the dir structure
               sh "find ocp_deploy_assets"
@@ -40,12 +40,13 @@ pipeline {
                     script {
                       openshift.withCluster() {
                         openshift.withProject() {
-                          files = findFiles(glob: '**/*.yaml')
-
-                          for (File f : files) {
-                            def objects = openshift.apply( readFile(f.path) )
-                            println "Created objects from path ${f.path}:\n ${objects.names()}"
-                          }
+                          sh """
+                          cd  Deployment/openshift/yaml
+                          openshift.apply(ssc.yaml)
+                          openshift.apply(dc.yaml)
+                          openshift.apply(service.yaml)
+                          openshift.apply(route.yaml)
+                          """
                         }
                       }
                     }
