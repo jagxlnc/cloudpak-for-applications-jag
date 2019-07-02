@@ -1,7 +1,8 @@
-ARG WEBSPHERE_VERSION=9.0.0.11
+#ARG WEBSPHERE_VERSION=9.0.0.11
 
 # Migration requires websphere-traditional >= 9.0.0.11
-FROM ibmcom/websphere-traditional:$WEBSPHERE_VERSION as migration
+#FROM ibmcom/websphere-traditional:$WEBSPHERE_VERSION as migration
+FROM ibmcom/websphere-traditional:9.0.0.11 as migration
 
 # Use --build-arg PASSWORD="your password" to specify password for WASPostUpgrade.
 ARG PASSWORD
@@ -18,7 +19,8 @@ RUN /opt/IBM/WebSphere/AppServer/bin/WASPostUpgrade.sh /tmp/migr -oldProfile App
     rm -rf /opt/IBM/WebSphere/AppServer/profiles/AppSrv01/installableApps/*
 
 # Requires the same websphere-traditional level as migration
-FROM ibmcom/websphere-traditional:$WEBSPHERE_VERSION
+#FROM ibmcom/websphere-traditional:$WEBSPHERE_VERSION
+FROM ibmcom/websphere-traditional:9.0.0.11
 
 RUN rm -rf /opt/IBM/WebSphere/AppServer/profiles/AppSrv01/servers/server1/configuration/wsBundleMetadata/jpa-2.1.xml && \
     rm -rf /opt/IBM/WebSphere/AppServer/profiles/AppSrv01/servers/server1/configuration/wsBundleMetadata/jaxrs-2.0.xml && \
