@@ -28,13 +28,12 @@ pipeline {
                     script {
                       openshift.withCluster() {
                         openshift.withProject() {
-                          sh """
-                          cd  Deployment/openshift/yaml
-                          openshift.apply(readFile(ssc.yaml))
-                          openshift.apply(readFile(dc.yaml))
-                          openshift.apply(readFile(service.yaml))
-                          openshift.apply(readFile(route.yaml))
-                          """
+                          files = findFiles(glob: 'Deployment/openshift/yaml/**/*.yaml')
+
+                          for (File f : files) {
+                          def objects = openshift.apply( readFile(f.path) )
+                          println "Created objects from path ${f.path}:\n ${objects.names()}"
+                          }
                         }
                       }
                     }
