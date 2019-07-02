@@ -20,7 +20,7 @@ pipeline {
             sh 'mvn clean package'
           }
         }
-        stage ('Copy OCP deployment artifacts') {
+        stage('Copy OCP deployment artifacts') {
           steps {
               // copy any raw yamls or json from openshift directory to be applied at deploy time
               sh """
@@ -32,7 +32,7 @@ pipeline {
               // print out the dir structure
               sh "find ocp_deploy_assets"
             } 
-            stage ("Deploy objects") {
+            stage("Deploy objects") {
                   steps {
                     script {
                       openshift.withCluster() {
