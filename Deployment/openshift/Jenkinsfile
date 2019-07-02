@@ -14,13 +14,26 @@ pipeline {
       label "maven"
     }
     stages {
+      stage('Maven build') {
+          steps {
+            sh """
+            mvn -v 
+            cd CustomerOrderServicesProject
+            mvn clean package
+            """
+          }
+        }
         stage("Deploy objects") {
                   steps {
                     script {
                       openshift.withCluster() {
                         openshift.withProject() {
-                          def objects2 = openshift.apply( readFile("Deployment/openshift/yaml/dc.yaml"), "--namespace=appmod-twas" )
+                          def objects1 = openshift.apply( readFile("Deployment/openshift/yaml/dc.yaml"), "--namespace=appmod-twas" )
+                          println "Created objects: ${objects1.names()}"
+                          def objects2 = openshift.apply( readFile("Deployment/openshift/yaml/service.yaml"), "--namespace=appmod-twas" )
                           println "Created objects: ${objects2.names()}"
+                          def objects3 = openshift.apply( readFile("Deployment/openshift/yaml/route.yaml"), "--namespace=appmod-twas" )
+                          println "Created objects: ${objects3.names()}"
                         }
                       }
                     }
