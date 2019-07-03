@@ -5,7 +5,7 @@
 FROM ibmcom/websphere-traditional:9.0.0.11 as migration
 
 # Use --build-arg PASSWORD="your password" to specify password for WASPostUpgrade.
-ARG PASSWORD
+#ARG PASSWORD
 
 COPY --chown=was:0 ./Deployment/Docker/migr /tmp/migr
 COPY --chown=was:0 ./Deployment/Docker/migration.properties /opt/IBM/WebSphere/AppServer/properties/migration.properties
@@ -13,7 +13,7 @@ COPY --chown=was:0 ./Deployment/Docker/migration.properties /opt/IBM/WebSphere/A
 # All other parameters to WASPostUpgrade are set in migration.properties. If you want to change those settings,
 # either edit migration.properties or specify them on the command line here, if available.
 # NOTE: Some parameters are required for container migration, and should not be changed
-RUN /opt/IBM/WebSphere/AppServer/bin/WASPostUpgrade.sh /tmp/migr -oldProfile AppSrv01 -profileName AppSrv01 -username wasadmin -password "$PASSWORD"  && \
+RUN /opt/IBM/WebSphere/AppServer/bin/WASPostUpgrade.sh /tmp/migr -oldProfile AppSrv01 -profileName AppSrv01 -username wasadmin -password wasadmin && \
     rm -rf /opt/IBM/WebSphere/AppServer/profiles/AppSrv01/temp/* && \
     rm -rf /opt/IBM/WebSphere/AppServer/profiles/AppSrv01/wstemp/* && \
     rm -rf /opt/IBM/WebSphere/AppServer/profiles/AppSrv01/installableApps/*
