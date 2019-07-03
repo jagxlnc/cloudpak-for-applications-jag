@@ -19,7 +19,7 @@ pipeline {
       label "maven"
     }
     stages {
-      /*stage('Maven build') {
+      stage('Maven build') {
           steps {
             sh """
             mvn -v 
@@ -27,27 +27,11 @@ pipeline {
             mvn clean package
             """
           }
-        }*/
-        /*stage("Deploy objects") {
-                  steps {
-                    script {
-                      openshift.withCluster() {
-                        openshift.withProject() {
-                          def objects1 = openshift.apply( readFile("Deployment/openshift/yaml/dc.yaml"), "--namespace=appmod-twas" )
-                          println "Created objects: ${objects1.names()}"
-                          def objects2 = openshift.apply( readFile("Deployment/openshift/yaml/service.yaml"), "--namespace=appmod-twas" )
-                          println "Created objects: ${objects2.names()}"
-                          def objects3 = openshift.apply( readFile("Deployment/openshift/yaml/route.yaml"), "--namespace=appmod-twas" )
-                          println "Created objects: ${objects3.names()}"
-                        }
-                      }
-                    }
-                  }
-                }*/ 
-                // Build Container Image using the artifacts produced in previous stages
-                        stage('Build Container Image'){
-                          steps {
-                            script {
+        }
+        // Build Container Image using the artifacts produced in previous stages
+      stage('Build Container Image'){
+                steps {
+                      script {
                               // Build container image using local Openshift cluster
                               openshift.withCluster() {
                                 openshift.withProject() {
@@ -125,6 +109,23 @@ pipeline {
                               }
                             }
                           }
-                    }
+                        }
+                    stage("Deploy objects") {
+                              steps {
+                                script {
+                                  openshift.withCluster() {
+                                    openshift.withProject() {
+                                      def objects1 = openshift.apply( readFile("Deployment/openshift/yaml/dc.yaml"), "--namespace=appmod-twas" )
+                                      println "Created objects: ${objects1.names()}"
+                                      def objects2 = openshift.apply( readFile("Deployment/openshift/yaml/service.yaml"), "--namespace=appmod-twas" )
+                                      println "Created objects: ${objects2.names()}"
+                                      def objects3 = openshift.apply( readFile("Deployment/openshift/yaml/route.yaml"), "--namespace=appmod-twas" )
+                                      println "Created objects: ${objects3.names()}"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                    
               }
             }
