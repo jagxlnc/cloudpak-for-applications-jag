@@ -155,7 +155,9 @@ pipeline {
 
                               // print out the dir structure
                               sh "find ocp_deploy_assets"
-                            }                
+                            }  
+                          }   
+                        }             
          /*stage("Deploy objects") {
                   steps {
                       script {
@@ -172,6 +174,5 @@ pipeline {
                         }
                       }
                     } */       
-                  }
-                }
-    }
+              }
+            }
