@@ -134,6 +134,7 @@ pipeline {
                                       "-f", "${f.path}", 
                                       "-p", "APP_NAME=${env.APP_NAME}",
                                       "-p", "IMAGE=${env.DST_IMAGE}",
+                                      "--namespace=appmod-twas",
                                       "--ignore-unknown-parameters")
 
                                     //println "Rendered Objects: " + objects
