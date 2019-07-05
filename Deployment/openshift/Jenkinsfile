@@ -120,7 +120,7 @@ pipeline {
                             openshift.withCluster() {
                             openshift.withProject() {
                             def deploymentConfig = readFile("Deployment/openshift/yaml/dc.yaml")
-                            deploymentConfig.replaceAll("image:", "image: ${env.DST_IMAGE}")
+                            deploymentConfig.replaceAll("image: docker-registry.default.svc:5000/appmod-twas/customerorderservices-twas:1.0", "image: ${env.DST_IMAGE}")
                             println "deploymentConfig : ${deploymentConfig}"
                             def objects1 = openshift.apply( deploymentConfig, "--namespace=appmod-twas" )
                             println "Created objects: ${objects1.names()}"
