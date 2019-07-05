@@ -113,56 +113,14 @@ pipeline {
                               }
                             }
                           }
-                        }*/
-                        stage ('Generate OCP deployment artifacts') {
-                          steps {
-                            script {
-                              sh "mkdir -p ocp_deploy_assets"
-
-                              // copy any raw yamls or json from openshift directory to be applied at deploy time
-                              sh """
-                              cp Deployment/openshift/yaml/*.yaml ocp_deploy_assets/ || true
-                              """
-                              
-                              // render any deploy templates now and output them to the output directory
-                              openshift.withCluster() {                    
-                                openshift.withProject() {
-                                  files = findFiles(glob: 'Deployment/openshift/yaml/*.*')
-
-                                  for (File f : files) {
-                                    def objects = openshift.process(
-                                      "-f", "${f.path}", 
-                                      "-p", "APP_NAME=${env.APP_NAME}",
-                                      "-p", "IMAGE=${env.DST_IMAGE}",
-                                      "--ignore-unknown-parameters")
-
-                                    //println "Rendered Objects: " + objects
-
-                                    dir('ocp_deploy_assets') {
-                                      for (Object obj : objects) {
-                                        // write the yaml to files
-                                        def objectName = obj.metadata.name
-                                        def objectType = obj.kind
-                                        writeYaml file: "${objectType}-${objectName}.yaml", data: obj
-
-                                        println "Wrote ${objectType}-${objectName}.yaml"
-                                        sh "cat ${objectType}-${objectName}.yaml"
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-
-                              // print out the dir structure
-                              sh "find ocp_deploy_assets"
-                            }  
-                          }   
-                        }             
-         /*stage("Deploy objects") {
+                        }*/         
+         stage("Deploy objects") {
                   steps {
                       script {
                             openshift.withCluster() {
                             openshift.withProject() {
+                            def render = readFile("Deployment/openshift/yaml/dc.yaml")
+                            render.replaceAll("image.*", "image: ${env.DST_IMAGE}")
                             def objects1 = openshift.apply( readFile("Deployment/openshift/yaml/dc.yaml"), "--namespace=appmod-twas" )
                             println "Created objects: ${objects1.names()}"
                             def objects2 = openshift.apply( readFile("Deployment/openshift/yaml/service.yaml"), "--namespace=appmod-twas" )
@@ -173,6 +131,6 @@ pipeline {
                          }
                         }
                       }
-                    } */       
+                    }        
               }
             }
