@@ -22,7 +22,7 @@ pipeline {
     agent {
       label "maven"
     }
-    stages {
+    /*stages {
       stage('Maven build') {
           steps {
             sh """
@@ -113,7 +113,7 @@ pipeline {
                               }
                             }
                           }
-                        }        
+                        }  */      
          stage("Deploy objects") {
                   steps {
                       script {
