@@ -117,12 +117,12 @@ pipeline {
          stage("Deploy objects") {
                   steps {
                       script {
+                            sh """
+                            sed -i -e 's#docker-registry.default.svc:5000/appmod-twas/customerorderservices-twas:1.0#${env.DST_IMAGE}#' Deployment/openshift/yaml/dc.yaml
+                            """
                             openshift.withCluster() {
                             openshift.withProject() {
-                            def deploymentConfig = readFile("Deployment/openshift/yaml/dc.yaml")
-                            deploymentConfig.replaceAll("docker-registry.default.svc:5000/appmod-twas/customerorderservices-twas:1.0", "${env.DST_IMAGE}")
-                            println "deploymentConfig : ${deploymentConfig}"
-                            def objects1 = openshift.apply( deploymentConfig, "--namespace=appmod-twas" )
+                            def objects1 = openshift.apply( readFile("Deployment/openshift/yaml/dc.yaml"), "--namespace=appmod-twas" )
                             println "Created objects: ${objects1.names()}"
                             def objects2 = openshift.apply( readFile("Deployment/openshift/yaml/service.yaml"), "--namespace=appmod-twas" )
                             println "Created objects: ${objects2.names()}"
