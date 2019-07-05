@@ -22,8 +22,8 @@ pipeline {
     agent {
       label "maven"
     }
-    /*stages {
-      stage('Maven build') {
+    stages {
+      /*stage('Maven build') {
           steps {
             sh """
             mvn -v 
