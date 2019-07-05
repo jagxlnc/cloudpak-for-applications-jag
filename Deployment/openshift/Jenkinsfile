@@ -119,9 +119,9 @@ pipeline {
                       script {
                             openshift.withCluster() {
                             openshift.withProject() {
-                            def render = readFile("Deployment/openshift/yaml/dc.yaml")
-                            render.replaceAll("image.*", "image: ${env.DST_IMAGE}")
-                            def objects1 = openshift.apply( readFile("Deployment/openshift/yaml/dc.yaml"), "--namespace=appmod-twas" )
+                            def deploymentConfig = readFile("Deployment/openshift/yaml/dc.yaml")
+                            deploymentConfig.replaceAll("image.*", "image: ${env.DST_IMAGE}")
+                            def objects1 = openshift.apply( deploymentConfig, "--namespace=appmod-twas" )
                             println "Created objects: ${objects1.names()}"
                             def objects2 = openshift.apply( readFile("Deployment/openshift/yaml/service.yaml"), "--namespace=appmod-twas" )
                             println "Created objects: ${objects2.names()}"
