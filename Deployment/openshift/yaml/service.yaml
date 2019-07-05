@@ -2,7 +2,6 @@ kind: Service
 apiVersion: v1
 metadata:
   name: cos-twas
-  namespace: appmod-twas
   labels:
     app: cos-twas
 spec:
