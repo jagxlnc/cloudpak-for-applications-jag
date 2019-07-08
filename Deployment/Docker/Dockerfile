@@ -37,7 +37,6 @@ COPY --chown=was:0 ./Deployment/Docker/db2drivers/ /opt/IBM/db2drivers/
 COPY --chown=was:0 ./Deployment/Docker/app-update.props  /work/config/app-update.props
 COPY --chown=was:0 ./Deployment/Docker/CustomerOrderServicesApp-0.1.0-SNAPSHOT.ear /work/config/CustomerOrderServicesApp-0.1.0-SNAPSHOT.ear
 
-RUN chown -R root:root /work
 RUN /work/configure.sh
 
 ENV ADMIN_USER_NAME=wasadmin
