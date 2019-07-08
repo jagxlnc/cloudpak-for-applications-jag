@@ -23,7 +23,7 @@ pipeline {
       label "maven"
     }
     stages {
-      /*stage('Maven build') {
+      stage('Maven build') {
           steps {
             sh """
             mvn -v 
@@ -113,13 +113,13 @@ pipeline {
                               }
                             }
                           }
-                        }*/       
+                        }      
          stage("Deploy objects") {
                   steps {
                       script {
-                            /*sh """
+                            sh """
                             sed -i -e 's#docker-registry.default.svc:5000/appmod-twas/customerorderservices-twas:1.0#${env.DST_IMAGE}#' Deployment/openshift/yaml/dc.yaml
-                            """*/
+                            """
                             openshift.withCluster() {
                             openshift.withProject() {
                             def objects1 = openshift.apply( readFile("Deployment/openshift/yaml/dc.yaml"), "--namespace=${env.NAMESPACE}" )
